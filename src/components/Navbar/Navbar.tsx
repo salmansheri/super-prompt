@@ -58,7 +58,7 @@ const Navbar = (props: Props) => {
 
                     <Link href="/profile">
                         <Image 
-                            src="/assets/images/logo.svg"
+                            src={session?.user?.image as string}
                             alt="profile"
                             width={37}
                             height={37}
@@ -92,7 +92,7 @@ const Navbar = (props: Props) => {
             {currentUser ? (
                 <div className="flex">
                     <Image 
-                            src="/assets/images/logo.svg"
+                            src={session?.user?.image as string}
                             alt="profile"
                             width={37}
                             height={37}

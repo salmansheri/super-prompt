@@ -1,7 +1,12 @@
 import Feed from "@/components/Feed";
+import getPosts from "@/actions/getPosts";
 
+export const revalidate = 60; 
+export default async function Home() {
+  const posts = await getPosts(); 
 
-export default function Home() {
+  
+
   return (
    <section className="w-full flex flex-center flex-col ">
     <h1 className="head_text text-center">
@@ -13,7 +18,7 @@ export default function Home() {
       Super Promts is an open-source AI prompting tool for modern world to discover, create and share creative prompts
     </p>
     {/* Feed  */}
-    <Feed />
+    <Feed posts={posts} />
    </section>
   )
 }
