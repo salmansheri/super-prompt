@@ -3,6 +3,8 @@
 import React from 'react'; 
 import PromptCard from '@/components/PromptCard';
 import { useRouter } from 'next/navigation'; 
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
 type Props = {
     name: string; 
@@ -28,8 +30,17 @@ const ProfileClient = ({name, desc, data}: Props) => {
     }, [router]); 
 
     const handleDelete = React.useCallback((id: string) => {
+        axios.delete(`/api/prompts/${id}`)
+            .then(() => {
+                toast.success("Successfully Deleted"); 
+                router.refresh(); 
+            })
+            .catch((error) => 
+                {toast.error("Something went Wrong")}
+            )
+            
 
-    }, [])
+    }, [router])
   return (
     <section className="w-full">
         <h1 className='head_text text-left blue_gradient'>{name}</h1>
