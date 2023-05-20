@@ -6,9 +6,9 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    const { username, email, password } = body;
+    const { name, email, password } = body;
 
-    if (!username || !email || !password) {
+    if (!name || !email || !password) {
       return;
     }
 
@@ -17,8 +17,9 @@ export async function POST(request: Request) {
 
     const user = await prisma.user.create({
       data: {
+        name,
         email,
-        username,
+      
         hashedPassword,
       },
     });

@@ -10,7 +10,7 @@ type Props = {
 
 interface PromptCardListProps {
   data?: Prompt[] | null;
-  handleTagClick: () => void; 
+  handleTagClick: (tagName: any) => void; 
 }
 
 
@@ -31,8 +31,44 @@ const PromptCardList = ({data, handleTagClick}: PromptCardListProps) => {
 }
 
 const Feed = ({posts}: Props) => {
+  const [prompts, setPrompts] = React.useState<Prompt[] | null>(posts); 
+  const [searchTimeout, setSearchTimeout] = React.useState(null); 
   const [searchText, setSearchText] = React.useState("");
-  const handleSearchChange = () => {
+  const [searchedResult, setSearchResult] = React.useState(null); 
+
+  const filterPrompts = (searchText: any) => {
+    const regex  = new RegExp(searchText, 'i'); 
+
+    return prompts?.filter((item) => 
+    // @ts-ignore
+                                regex.test(item.creator.name) || 
+                                regex.test(item.tag) || 
+                                regex.test(item.prompt)
+        )
+
+  }
+  const handleSearchChange = (e: any) => {
+    // @ts-ignore
+    clearTimeout(searchTimeout)
+    setSearchText(e.target.value); 
+
+    // debounce method
+
+    // @ts-ignore
+    setSearchTimeout(setTimeout(() => {
+      const searchResult = filterPrompts(e.target.value); 
+      // @ts-ignore
+      setSearchResult(searchResult); 
+    }, 500))
+  }
+
+  console.log(prompts)
+
+  const handleTagClick = (tagName: any) => {
+    setSearchText(tagName); 
+    const searchResult = filterPrompts(tagName); 
+    // @ts-ignore
+    setSearchResult(searchResult)
 
   }
   
@@ -44,7 +80,7 @@ const Feed = ({posts}: Props) => {
           placeholder="Search for a tag or a username"
           value={searchText}
           className="search_input peer"
-          onChange={handleSearchChange}
+          onChange={(e) => handleSearchChange(e)}
 
 
         />
@@ -52,8 +88,8 @@ const Feed = ({posts}: Props) => {
       </form>
 
       <PromptCardList 
-        data={posts}
-        handleTagClick={() => {}}
+        data={searchedResult}
+        handleTagClick={handleTagClick}
       />
 
     </section>
